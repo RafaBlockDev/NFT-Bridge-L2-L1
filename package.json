@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/RafaCypherpunk/NFT-Bridge-L2-L1/issues"
   },
-  "homepage": "https://github.com/RafaCypherpunk/NFT-Bridge-L2-L1#readme"
+  "homepage": "https://github.com/RafaCypherpunk/NFT-Bridge-L2-L1#readme",
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.3.1"
+  }
 }
