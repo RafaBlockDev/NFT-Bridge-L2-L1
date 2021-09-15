@@ -49,13 +49,14 @@ contract NFT is ERC721Enumerable, Ownable {
     }
     
     function walletOfOwner(address _owner)
-    publicview
+    public
+    view
     returns (uint256[] memory)
     {
         uint256 ownerTokenCount = balanceOf(_owner);
         uint256[] memory tokenIds = new uint256[](ownerTokenCount);
-        for(uin256 i; i < ownerTokenCount; i++) {
-            tokenIds[i] = _tokenOfOwnerByIndex(_owner, i);
+        for(uint256 i; i < ownerTokenCount; i++) {
+            tokenIds[i] = tokenOfOwnerByIndex(_owner, i);
         }
         return tokenIds;
     }
@@ -65,7 +66,7 @@ contract NFT is ERC721Enumerable, Ownable {
     view
     virtual
     override
-    returns (string meomry)
+    returns (string memory)
     {
         require(
             _exists(tokenId),
@@ -79,4 +80,35 @@ contract NFT is ERC721Enumerable, Ownable {
     }
 
     // only owner
+    function setCost(uint256 _newCost) public onlyOwner() {
+        cost = _newCost;
+    }
+
+    function setmaxMintAmount(uint256 _newmaxMintAmount) public onlyOwner() {
+        maxMintAmount = _newmaxMintAmount;
+    }
+
+    function setBaseURI(string memory _newBaseURI) public onlyOwner {
+        baseURI = _newBaseURI;
+    }
+
+    function setBaseExtension(string memory _newBaseExtension) public onlyOwner {
+        baseExtension = _newBaseExtension;
+    }
+
+    function pause(bool _state) public onlyOwner {
+        paused = _state;
+    }
+
+    function whitelistUser(address _user) public onlyOwner {
+        whitelisted[_user] = true;
+    }
+
+    function removeWhitelistUser(address _user) public onlyOwner {
+        whitelisted[_user] = false;
+    }
+
+    function withdraw() public payable onlyOwner {
+        require(payable(msg.sender).send(address(this).balance));
+    }
 }
