@@ -10,7 +10,7 @@ contract NFT is ERC721Enumerable, Ownable {
 
     string public baseURI;
     string public baseExtension = ".json";
-    uint256 public cost = 10000 ether; // Is equality as = 0.0001 matics each NFT
+    uint256 public cost = 100 ether; // Is equality as = 100 matics each NFT
     uint256 public maxSupply = 10000;
     uint256 public maxMintAmount = 20;
     bool public paused = false;
@@ -38,8 +38,45 @@ contract NFT is ERC721Enumerable, Ownable {
         require(supply + _mintAmount <= maxSupply);
 
         if(msg.sender != owner()) {
-            if(whitelisted[msg.sender] != true)
+            if(whitelisted[msg.sender] != true) {
+                require(msg.value >= cost * _mintAmount);
+            }
+        }
+
+        for (uint256 i = 1; i <= _mintAmount; i++) {
+            _safeMint(_to, supply + i);
         }
     }
+    
+    function walletOfOwner(address _owner)
+    publicview
+    returns (uint256[] memory)
+    {
+        uint256 ownerTokenCount = balanceOf(_owner);
+        uint256[] memory tokenIds = new uint256[](ownerTokenCount);
+        for(uin256 i; i < ownerTokenCount; i++) {
+            tokenIds[i] = _tokenOfOwnerByIndex(_owner, i);
+        }
+        return tokenIds;
+    }
 
+    function tokenURI(uint256 tokenId)
+    public
+    view
+    virtual
+    override
+    returns (string meomry)
+    {
+        require(
+            _exists(tokenId),
+            "ERC721Metadata: URI query for nonexistent token"
+        );
+
+        string memory currentBaseURI = _baseURI();
+        return bytes(currentBaseURI).length > 0
+            ? string(abi.encodePacked(currentBaseURI, tokenId.toString(), baseExtension))
+            : "";
+    }
+
+    // only owner
 }
