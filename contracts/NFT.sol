@@ -25,6 +25,8 @@ contract NFT is ERC721Enumerable, Ownable {
     bool public paused = false;
     mapping(address => bool) public whitelisted;
 
+    event withdraw(string indexed _name, string indexed _symbol, string indexed _initBaseURI);
+
     constructor(
         string memory _name,
         string memory _symbol,
@@ -117,7 +119,27 @@ contract NFT is ERC721Enumerable, Ownable {
         whitelisted[_user] = false;
     }
 
-    function withdraw() public payable onlyOwner {
+    function setwithdraw() public payable onlyOwner {
         require(payable(msg.sender).send(address(this).balance));
     }
+}
+
+contract Root {
+
+    address public predicate;
+    constructor(address _predicate) public{
+        predicate=_predicate;
+    }
+
+   modifier onlyPredicate() {
+        require(msg.sender == predicate);
+        _;
+    }
+
+    uint256 public data;
+
+    function setData(bytes memory bytes_data) public onlyPredicate{
+        data = abi.decode(bytes_data,(uint256));
+    }
+
 }
