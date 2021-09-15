@@ -7,6 +7,12 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "./FxBaseChildTunnel.sol";
 import "./FxBaseRootTunnel.sol";
 
+/*
+roceed to call withdraw() with the respective token address and token ID as arguments
+ on the child contract to move the child tokens back to the designated receiver on the root chain.
+  Note the tx hash as this will be used to generate the burn proof.
+*/
+
 
 contract NFT is ERC721Enumerable, Ownable {
     using Strings for uint256;
